@@ -1,14 +1,14 @@
+# %%
 import os
 from pathlib import Path
-from dotenv import load_dotenv
+
 from ice.recipe import recipe
+from fvalues import F
 
-# Load environment variables from .env file
-load_dotenv(Path(__file__).parent / '.env')
+REPO_DIR = Path(__file__).parent
 
-# Now you can access the API key like this:
-api_key = os.getenv('OPENAI_API_KEY')
-
+# %%
+# Hello world
 async def say_hello():
     hola = await say_hola()
     return f"Hello world! {hola}"
@@ -16,4 +16,23 @@ async def say_hello():
 async def say_hola():
     return "Hola mundo!"
 
-recipe.main(say_hello)
+# recipe.main(say_hello)
+# %%
+# Q&A
+def make_qa_prompt(question: str) -> str:
+    return F(
+        f"""Answer the following question:
+
+    Question: "{question}"
+    Answer: "
+    """
+    ).strip()
+
+
+async def answer(question: str = "What is happening on 9/9/2022?"):
+    prompt = make_qa_prompt(question)
+    answer = await recipe.agent().complete(prompt=prompt, stop='"')
+    return answer
+
+recipe.main(answer)
+# %%

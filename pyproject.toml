@@ -11,6 +11,7 @@ package-mode = false
 python = "~3.11"
 ought-ice = "^0.5.0"
 pydantic = "<2"
+ipykernel = "^6.29.5"
 
 
 [build-system]
